@@ -1,0 +1,82 @@
+Importez le fichier SQL "catalogue.sql" dans une base de donnée nommée "catalogue"
+(il y'a deux erreurs de virgules dans le script, à vous de les trouver)
+
+—> Virgule en trop ligne 116 après NULL
+—> Virgule oubliée ligne 123 entre id_film et id_categorie
+
+1]
+-Sélectionnez tous les champs des films sortis après 1960.
+-Sélectionnez le titre des films sortis avant 1960.
+
+-SELECT * FROM `film` WHERE `date_sortie` > '1960-12-31';
+-SELECT `titre` FROM `film` WHERE `date_sortie` < '1960-01-01';
+
+
+2]
+-Changez la description du film dont l'ID est 35
+
+-UPDATE `film` SET `description` = 'Vous prenez la pilule rouge ou la pilule bleue ?' WHERE id = 35;
+
+
+3]
+-Insérez un nouveau film - Qu'il soit rattaché à au moins trois catégories. Donnez les requêtes SQL utilisées.
+
+-INSERT INTO `film`(`id`, `titre`, `slug`, `image`, `prix`, `description`, `date_sortie`) VALUES (NULL,'Retour vers le Futur’,’retourverslefutur’,’https://www.ecranlarge.com/uploads/image/001/202/y9bs2n5rem51ybxbu7n5paxjc6w-082.jpg',21,'Un ado se retrouve dans le passé et doit faire en sorte que ses parents se rencontrent pour ne pas disparaître', '1985-10-30');
+
+-INSERT INTO `films_categs`(`id_film`, `id_categorie`) VALUES (44, 49);
+-INSERT INTO `films_categs`(`id_film`, `id_categorie`) VALUES (44, 35);
+-INSERT INTO `films_categs`(`id_film`, `id_categorie`) VALUES (44, 52);
+
+4]
+-récupérez dans la même requête tous les commentaires du film dont l'ID est 43,
+ tous les champs du film 43, et tous les champs des utilisateurs ayant mis ces commentaires
+
+-SELECT `commentaire`.`commentaire`, `film`.id, `titre`, `slug`, `image`, `prix`, `description`, `date_sortie`, `user`.`id`, `user`.`email`, `user`.`password`, `user`.`avatar`, `user`.`role`, `user`.`login` FROM `film` INNER JOIN `commentaire` INNER JOIN `user` ON `commentaire`.`id_film` = `film`.id AND `commentaire`.`id_user` = `user`.`id` WHERE `film`.`id` = 43;
+
+5]
+-Supprimez le film dont le slug commence par "t"
+
+-DELETE FROM `film` WHERE slug LIKE 't%';
+
+
+6]
+-Récupérez tous les champs des utilisateurs qui ont mis des commentaires. Il ne doit pas avoir de doublons -
+ un même utilisateur ne doit apparaître qu'une seule fois
+
+-SELECT DISTINCT `commentaire`.`id_user`, `user`.`email`, `user`.`password`, `user`.`avatar`, `user`.`role`, `user`.`login` FROM `commentaire` INNER JOIN `user` ON `commentaire`.`id_user` = `user`.`id`;
+
+
+7]
+-Récupérez tous les champs des films de la catégorie dont l'ID est 51
+
+-SELECT `film`.`id`, `film`.`titre`, `film`.`slug`, `film`.`image`, `film`.`prix`, `film`.`description`, `film`.`date_sortie` FROM `films_categs` INNER JOIN `film` ON `films_categs`.`id_film` = `film`.`id` WHERE `films_categs`.`id_categorie` = 51;
+
+
+
+8]
+-faites la moyenne des notes des films du site
+
+-SELECT AVG(note) FROM `commentaire`;
+
+
+9]
+-Récupérez tous les films sortis au mois de juin
+
+-SELECT * FROM `film` WHERE `date_sortie` LIKE ‘%%%%-06-%%’;
+
+
+10]
+-Récupérez tous les utilisateurs dont le role est 1 et qui ont postés des commentaires.
+ Il ne doit pas y avoir de doublon.
+
+-SELECT DISTINCT `commentaire`.`id_user`, `user`.`email`, `user`.`password`, `user`.`avatar`, `user`.`role`, `user`.`login` FROM `commentaire` INNER JOIN `user` ON `commentaire`.`id_user` = `user`.`id` WHERE `user`.`role` = 1;
+
+
+
+
+
+
+
+
+
+
